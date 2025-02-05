@@ -1,0 +1,92 @@
+server:
+  port: 8088
+
+---
+
+spring:
+  profiles: default
+  cloud:
+    gateway:
+#<<< API Gateway / Routes
+      routes:
+        - id: VehicleOperation
+          uri: http://localhost:8082
+          predicates:
+            - Path=/operationRecords/**, /operationRecordSummaries/**, /operationRecordDetails/**
+        - id: DispatchManagement
+          uri: http://localhost:8083
+          predicates:
+            - Path=/assignmentRequests/**, /assignmentRequestSummaries/**, /assignmentRequestDetails/**
+        - id: Maintenance
+          uri: http://localhost:8084
+          predicates:
+            - Path=/maintenanceRecords/**, /vehicles/**, /maintenanceHistories/**, /maintenanceDetails/**
+        - id: ExpenseManagement
+          uri: http://localhost:8085
+          predicates:
+            - Path=/expenses/**, /expenseSummaries/**, /expenseDetails/**
+        - id: Dashboard
+          uri: http://localhost:8086
+          predicates:
+            - Path=/operationSummaries/**, /dashboardMetrics/**, /operationSummaryReports/**, /operationDetails/**
+        - id: frontend
+          uri: http://localhost:8080
+          predicates:
+            - Path=/**
+#>>> API Gateway / Routes
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+
+---
+
+spring:
+  profiles: docker
+  cloud:
+    gateway:
+      routes:
+        - id: VehicleOperation
+          uri: http://vehicleOperation:8080
+          predicates:
+            - Path=/operationRecords/**, 
+        - id: DispatchManagement
+          uri: http://dispatchManagement:8080
+          predicates:
+            - Path=/assignmentRequests/**, 
+        - id: Maintenance
+          uri: http://maintenance:8080
+          predicates:
+            - Path=/maintenanceRecords/**, /vehicles/**, 
+        - id: ExpenseManagement
+          uri: http://expenseManagement:8080
+          predicates:
+            - Path=/expenses/**, 
+        - id: Dashboard
+          uri: http://dashboard:8080
+          predicates:
+            - Path=/operationSummaries/**, /dashboardMetrics/**, 
+        - id: frontend
+          uri: http://frontend:8080
+          predicates:
+            - Path=/**
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+
+server:
+  port: 8080

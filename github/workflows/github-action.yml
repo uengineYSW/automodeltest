@@ -1,0 +1,87 @@
+name: github-action
+run-name: ${{ github.actor }} is out building GitHub Actions
+
+on:
+  push:
+    # Pattern matched against refs/tags
+    tags:        
+      - '**' 
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Build Maven Projects
+        run: |
+          mvn clean package -f ./VehicleOperation/pom.xml
+          mvn clean package -f ./DispatchManagement/pom.xml
+          mvn clean package -f ./Maintenance/pom.xml
+          mvn clean package -f ./ExpenseManagement/pom.xml
+          mvn clean package -f ./Dashboard/pom.xml
+
+      - name: Docker Build and push for VehicleOperation
+        uses: docker/build-push-action@v4
+        with:
+          context: ./VehicleOperation
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/vehicleoperation:latest
+            ghcr.io/${{ github.repository }}/vehicleoperation:${{ github.ref_name }}
+            
+      - name: Docker Build and push for DispatchManagement
+        uses: docker/build-push-action@v4
+        with:
+          context: ./DispatchManagement
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/dispatchmanagement:latest
+            ghcr.io/${{ github.repository }}/dispatchmanagement:${{ github.ref_name }}
+            
+      - name: Docker Build and push for Maintenance
+        uses: docker/build-push-action@v4
+        with:
+          context: ./Maintenance
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/maintenance:latest
+            ghcr.io/${{ github.repository }}/maintenance:${{ github.ref_name }}
+            
+      - name: Docker Build and push for ExpenseManagement
+        uses: docker/build-push-action@v4
+        with:
+          context: ./ExpenseManagement
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/expensemanagement:latest
+            ghcr.io/${{ github.repository }}/expensemanagement:${{ github.ref_name }}
+            
+      - name: Docker Build and push for Dashboard
+        uses: docker/build-push-action@v4
+        with:
+          context: ./Dashboard
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/dashboard:latest
+            ghcr.io/${{ github.repository }}/dashboard:${{ github.ref_name }}
+            

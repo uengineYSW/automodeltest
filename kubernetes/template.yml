@@ -1,0 +1,285 @@
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: VehicleOperation
+  labels:
+    app: VehicleOperation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: VehicleOperation
+  template:
+    metadata:
+      labels:
+        app: VehicleOperation
+    spec:
+      containers:
+        - name: VehicleOperation
+          image: username/VehicleOperation:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: DispatchManagement
+  labels:
+    app: DispatchManagement
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: DispatchManagement
+  template:
+    metadata:
+      labels:
+        app: DispatchManagement
+    spec:
+      containers:
+        - name: DispatchManagement
+          image: username/DispatchManagement:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Maintenance
+  labels:
+    app: Maintenance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Maintenance
+  template:
+    metadata:
+      labels:
+        app: Maintenance
+    spec:
+      containers:
+        - name: Maintenance
+          image: username/Maintenance:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ExpenseManagement
+  labels:
+    app: ExpenseManagement
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ExpenseManagement
+  template:
+    metadata:
+      labels:
+        app: ExpenseManagement
+    spec:
+      containers:
+        - name: ExpenseManagement
+          image: username/ExpenseManagement:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: Dashboard
+  labels:
+    app: Dashboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: Dashboard
+  template:
+    metadata:
+      labels:
+        app: Dashboard
+    spec:
+      containers:
+        - name: Dashboard
+          image: username/Dashboard:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 10
+          livenessProbe:
+            httpGet:
+              path: '/actuator/health'
+              port: 8080
+            initialDelaySeconds: 120
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: VehicleOperation
+  labels:
+    app: VehicleOperation
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: VehicleOperation
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: DispatchManagement
+  labels:
+    app: DispatchManagement
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: DispatchManagement
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: Maintenance
+  labels:
+    app: Maintenance
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: Maintenance
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ExpenseManagement
+  labels:
+    app: ExpenseManagement
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: ExpenseManagement
+
+
+---
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: Dashboard
+  labels:
+    app: Dashboard
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: Dashboard
+
